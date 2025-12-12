@@ -1,9 +1,6 @@
-use std::path::PathBuf;
-use chrono::{
-    NaiveDate,
-    NaiveTime,
-};
+use chrono::{NaiveDate, NaiveTime};
 use color_eyre::eyre::Result;
+use std::path::PathBuf;
 
 pub fn to_unix(date: &NaiveDate) -> Result<u64> {
     let dt_unix = date
@@ -14,5 +11,10 @@ pub fn to_unix(date: &NaiveDate) -> Result<u64> {
     Ok(dt_unix * 1_000_000_000)
 }
 
-pub fn str_to_pathbuf(str: String) -> Result<PathBuf> { Ok(PathBuf::from(str)) }
-pub fn str_to_naivedate(str: String) -> Result<NaiveDate> { Ok(NaiveDate::parse_from_str(&str, "%Y-%m-%d")?) }
+pub fn str_to_pathbuf(str: String) -> Result<PathBuf> {
+    Ok(PathBuf::from(str))
+}
+
+pub fn str_to_naivedate(str: String) -> Result<NaiveDate> {
+    Ok(NaiveDate::parse_from_str(&str, "%Y-%m-%d")?)
+}

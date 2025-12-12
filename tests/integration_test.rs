@@ -1,5 +1,5 @@
-use mbo_engine::Config;
 use color_eyre::eyre::Result;
+use mbo_engine::Config;
 
 #[test]
 fn integration_test() -> Result<()> {
@@ -19,6 +19,6 @@ fn integration_test() -> Result<()> {
         },
         &config,
     )?;
-    
+
     Ok(())
 }

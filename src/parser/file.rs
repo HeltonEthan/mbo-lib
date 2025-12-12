@@ -1,13 +1,9 @@
 use color_eyre::eyre::Result;
-use std::{
-    fs,
-    num::NonZero,
-    path::PathBuf,
-};
 use std::ffi::OsStr;
+use std::{fs, num::NonZero, path::PathBuf};
 
-use crate::parser::dbn;
 use crate::Config;
+use crate::parser::dbn;
 
 //gets the proper files to be run from the directory
 pub fn get_files(config: &Config) -> Result<Vec<PathBuf>> {
@@ -23,8 +19,11 @@ pub fn get_files(config: &Config) -> Result<Vec<PathBuf>> {
 
         let file_metadata = dbn::decode_metadata(&path)?;
 
-        if config.start_unix()? <= file_metadata.start && file_metadata.start <= config.end_unix()? ||
-        Some(NonZero::new(config.start_unix()?).unwrap()) <= file_metadata.end && file_metadata.end <= Some(NonZero::new(config.end_unix()?).unwrap()) {
+        if config.start_unix()? <= file_metadata.start
+            && file_metadata.start <= config.end_unix()?
+            || Some(NonZero::new(config.start_unix()?).unwrap()) <= file_metadata.end
+                && file_metadata.end <= Some(NonZero::new(config.end_unix()?).unwrap())
+        {
             files_in_dir.push(path)
         }
     }
@@ -68,8 +67,11 @@ mod test {
             println!("file_metadata.start: {:#?}", file_metadata.start);
             println!("file_metadata.end: {:#?}", file_metadata.end);
 
-            if helper::to_unix(&start)? <= file_metadata.start && file_metadata.start <= helper::to_unix(&end)? ||
-            Some(NonZero::new(helper::to_unix(&start)?).unwrap()) <= file_metadata.end && file_metadata.end <= Some(NonZero::new(helper::to_unix(&end)?).unwrap()) {
+            if helper::to_unix(&start)? <= file_metadata.start
+                && file_metadata.start <= helper::to_unix(&end)?
+                || Some(NonZero::new(helper::to_unix(&start)?).unwrap()) <= file_metadata.end
+                    && file_metadata.end <= Some(NonZero::new(helper::to_unix(&end)?).unwrap())
+            {
                 files_in_dir.push(path);
             }
         }

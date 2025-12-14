@@ -4,6 +4,8 @@ use std::path::PathBuf;
 
 use crate::helper;
 
+//config struct { directory, start, end }
+
 #[derive(Debug)]
 pub struct Config {
     pub dir: PathBuf,

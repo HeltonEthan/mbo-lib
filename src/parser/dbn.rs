@@ -11,8 +11,8 @@ use fallible_streaming_iterator::FallibleStreamingIterator;
 use std::{fs::File, io::BufReader, path::PathBuf};
 
 use crate::Config;
-use crate::parser::file;
 use crate::orderbook::market::Market;
+use crate::parser::file;
 
 //run function that starts a backtest
 //uses a callback function to give mbo_msgs to logic
@@ -55,9 +55,7 @@ mod test {
 
     #[test]
     pub fn dbn_stream() -> Result<()> {
-        let path = PathBuf::from(
-            r"C:/Users/helto/GLBX-20250915-NGKNUL4VBG/glbx-mdp3-20250512-20250517.mbo.dbn.zst",
-        );
+        let path = PathBuf::from(r"C:/Users/helto/GLBX-20250915-NGKNUL4VBG/glbx-mdp3-20250512-20250517.mbo.dbn.zst");
         let start_unix = None;
         let end_unix = None;
         let mut dbn_stream = Decoder::from_zstd_file(path)?.decode_stream::<MboMsg>();
@@ -118,9 +116,7 @@ mod test {
 
     #[test]
     pub fn decode_metadata() -> Result<()> {
-        let path = PathBuf::from(
-            r"C:/Users/helto/GLBX-20250915-NGKNUL4VBG/glbx-mdp3-20250512-20250517.mbo.dbn.zst",
-        );
+        let path = PathBuf::from(r"C:/Users/helto/GLBX-20250915-NGKNUL4VBG/glbx-mdp3-20250512-20250517.mbo.dbn.zst");
         let reader = zstd::stream::Decoder::new(BufReader::new(File::open(path)?)).unwrap();
         let _decode = MetadataDecoder::new(reader).decode()?;
         Ok(())

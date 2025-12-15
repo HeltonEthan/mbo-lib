@@ -1,6 +1,4 @@
-use chrono::{
-    NaiveDate, NaiveTime
-};
+use chrono::{NaiveDate, NaiveTime};
 use color_eyre::eyre::Result;
 use std::path::PathBuf;
 

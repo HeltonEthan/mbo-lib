@@ -1,9 +1,5 @@
-use dbn::{
-    Action, BidAskPair, MboMsg, Side, UNDEF_PRICE,
-};
-use std::collections::{
-    BTreeMap, HashMap, VecDeque
-};
+use dbn::{Action, BidAskPair, MboMsg, Side, UNDEF_PRICE};
+use std::collections::{BTreeMap, HashMap, VecDeque};
 
 use crate::orderbook::pricelevel::PriceLevel;
 
@@ -41,15 +37,11 @@ impl Book {
     }
 
     pub fn bid_level_by_px(&self, px: i64) -> Option<PriceLevel> {
-        self.bids
-            .get(&px)
-            .map(|orders| PriceLevel::new(px, orders.iter()))
+        self.bids.get(&px).map(|orders| PriceLevel::new(px, orders.iter()))
     }
 
     pub fn ask_level_by_px(&self, px: i64) -> Option<PriceLevel> {
-        self.offers
-            .get(&px)
-            .map(|orders| PriceLevel::new(px, orders.iter()))
+        self.offers.get(&px).map(|orders| PriceLevel::new(px, orders.iter()))
     }
 
     pub fn order(&self, order_id: u64) -> Option<&MboMsg> {
@@ -116,14 +108,11 @@ impl Book {
             // UNDEF_PRICE indicates the side's book should be cleared
             // and doesn't represent an order that should be added
             if mbo.price != UNDEF_PRICE {
-                levels.insert(price, VecDeque::from([mbo]));
+                assert!(levels.insert(price, VecDeque::from([mbo])).is_none());
             }
-        } else {
+        } else if mbo.side().unwrap() != Side::None && mbo.price.is_positive() {
             assert_ne!(price, UNDEF_PRICE);
-            assert!(self
-                .orders_by_id
-                .insert(mbo.order_id, (side, price))
-                .is_none());
+            assert!(self.orders_by_id.insert(mbo.order_id, (side, price)).is_none());
             let level: &mut Level = self.get_or_insert_level(side, price);
             level.push_back(mbo);
         }

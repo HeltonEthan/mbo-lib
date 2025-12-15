@@ -1,7 +1,5 @@
+use dbn::{MboMsg, pretty};
 use std::fmt::Display;
-use dbn::{
-    MboMsg, pretty,
-};
 
 #[derive(Debug, Clone)]
 pub struct PriceLevel {

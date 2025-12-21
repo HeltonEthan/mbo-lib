@@ -5,3 +5,4 @@ edition = "2024"
 
 [dependencies]
 dbn_mbo_internal = { workspace = true }
+plotpy = "1.14.0"

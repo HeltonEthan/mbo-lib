@@ -26,10 +26,10 @@ pub fn run<F: FnMut(&MboMsg) -> Option<Action>>(mut logic: F, cfg: &Config) -> a
         let mut dbn_stream = Decoder::from_zstd_file(path)?.decode_stream::<MboMsg>();
         while let Some(mbo_msg) = dbn_stream.next()? {
             if mbo_msg.ts_recv < start_unix {
-                continue;
+                continue
             }
             if mbo_msg.ts_recv > end_unix {
-                break;
+                break
             }
             market.apply(mbo_msg.clone());
             logic(mbo_msg);

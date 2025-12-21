@@ -1,6 +1,7 @@
-use crate::config::Config;
+use crate::api::action::Order;
 use crate::orderbook::market::Market;
 use crate::parser::file;
+use crate::prelude::*;
 use dbn::{
     decode::{
         DecodeStream,
@@ -11,41 +12,29 @@ use dbn::{
 use fallible_streaming_iterator::FallibleStreamingIterator;
 use std::{fs::File, io::BufReader, path::PathBuf};
 
-type TsEvent = u64;
-
-/// Return type of logic, used to communicate with the engine
-pub enum Signal {
-    Trade(u64,  TsEvent), /// (order_id, TsEvent)
-    Cancel(u64, TsEvent), /// (order_id, TsEvent)
-    Modify(u64, TsEvent), /// (order_id, TsEvent)
-    None
-}
-
 /// Run is the entry point of the engine
-/// 
+///
 /// It iterates through each file and creates a dbn stream for each,
-/// it passes a clone of mbo_msg to the limit orderbook for reconstruction. 
+/// it passes a clone of mbo_msg to the limit orderbook for reconstruction.
 /// Then passes a reference of mbo to the callback function 'logic'.
-pub fn run<F: FnMut(&MboMsg) -> Signal>(mut logic: F, cfg: &Config) -> anyhow::Result<()> {
+pub fn run<F: FnMut(&MboMsg) -> Option<Action>>(mut logic: F, cfg: &Config) -> anyhow::Result<()> {
     let start_unix = cfg.start_unix()?;
     let end_unix = cfg.end_unix()?;
     let mut market = Market::new();
-    for path in file::get_files(&cfg)?.iter() { // Find and iterate through valid files
+    for path in file::get_files(&cfg)?.iter() {
+        // Find and iterate through valid files
         let mut dbn_stream = Decoder::from_zstd_file(path)?.decode_stream::<MboMsg>();
         while let Some(mbo_msg) = dbn_stream.next()? {
             if mbo_msg.ts_recv < start_unix {
-                continue
+                continue;
             }
             if mbo_msg.ts_recv > end_unix {
-                break
+                break;
             }
             market.apply(mbo_msg.clone());
-            match logic(mbo_msg) {
-                Signal::Trade(_order_id, _ts_event) => {},
-                Signal::Cancel(_order_id, _ts_event) => {},
-                Signal::Modify(_order_id, _ts_event) => {},
-                Signal::None => {},
-            }
+            if let Some(action) = logic(mbo_msg) {
+                Order::new(action, mbo_msg);
+            };
         }
     }
     Ok(())

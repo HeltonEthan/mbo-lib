@@ -4,9 +4,9 @@ use std::path::PathBuf;
 use crate::helper;
 
 /// Config gives the engine specific details on where and what to run.
-/// 
-/// This struct holds information about the directory the engine will look at, 
-/// the latency to consider for slippage, 
+///
+/// This struct holds information about the directory the engine will look at,
+/// the latency to consider for slippage,
 /// and what files it should consider in regards to start and end.
 #[derive(Debug)]
 pub struct Config {
@@ -19,7 +19,12 @@ pub struct Config {
 impl Config {
     /// Creates a new config with given dir, start, end, and latency (ms)
     pub fn new(dir: PathBuf, start: NaiveDate, end: NaiveDate, latency: u16) -> Self {
-        Self { dir, start, end, latency }
+        Self {
+            dir,
+            start,
+            end,
+            latency,
+        }
     }
 
     /// Returns a reference to the dir.

@@ -1,7 +1,7 @@
-use dbn_mbo_engine::prelude::*;
 use chrono::NaiveDate;
-use std::path::PathBuf;
 use dbn::record::MboMsg;
+use dbn_mbo_engine::prelude::*;
+use std::path::PathBuf;
 
 // cargo test -p dbn_mbo_engine --test integration_engine engine_test --release
 #[test]
@@ -16,7 +16,7 @@ fn engine_test() -> anyhow::Result<()> {
     Ok(())
 }
 
-fn logic(mbo: &MboMsg) -> Signal {
+fn logic(mbo: &MboMsg) -> Option<Action> {
     _ = mbo;
-    Signal::None
+    None
 }

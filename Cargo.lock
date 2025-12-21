@@ -61,32 +61,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "cme_mbo_engine"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "chrono",
- "dbn",
- "fallible-streaming-iterator",
- "zstd",
-]
-
-[[package]]
-name = "cme_mbo_graphing"
-version = "0.1.0"
-dependencies = [
- "pyo3",
-]
-
-[[package]]
-name = "cme_mbo_internal"
-version = "0.1.0"
-dependencies = [
- "cme_mbo_engine",
- "cme_mbo_graphing",
-]
-
-[[package]]
 name = "core-foundation-sys"
 version = "0.8.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -144,10 +118,36 @@ dependencies = [
 ]
 
 [[package]]
+name = "dbn_mbo_engine"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "chrono",
+ "dbn",
+ "fallible-streaming-iterator",
+ "zstd",
+]
+
+[[package]]
+name = "dbn_mbo_graphing"
+version = "0.1.0"
+dependencies = [
+ "pyo3",
+]
+
+[[package]]
+name = "dbn_mbo_internal"
+version = "0.1.0"
+dependencies = [
+ "dbn_mbo_engine",
+ "dbn_mbo_graphing",
+]
+
+[[package]]
 name = "dbn_mbo_sdk"
 version = "0.1.0"
 dependencies = [
- "cme_mbo_internal",
+ "dbn_mbo_internal",
 ]
 
 [[package]]

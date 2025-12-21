@@ -1,4 +1,4 @@
-## Python dependencies (for cme_mbo_graphing)
+## Python dependencies (for dbn_mbo_graphing)
 
 Install into your active venv:
 

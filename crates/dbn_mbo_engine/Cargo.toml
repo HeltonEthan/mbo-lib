@@ -9,3 +9,4 @@ anyhow = { workspace = true }
 dbn = { workspace = true }
 fallible-streaming-iterator = { workspace = true }
 zstd = { workspace = true }
+rand = { workspace = true }

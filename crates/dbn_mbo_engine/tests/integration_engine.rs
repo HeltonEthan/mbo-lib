@@ -1,6 +1,6 @@
 use chrono::NaiveDate;
 use dbn::record::MboMsg;
-use dbn_mbo_engine::prelude::*;
+use dbn_mbo_engine::{api::latency::UnitNormalLatency, prelude::*};
 use std::path::PathBuf;
 
 // cargo test -p dbn_mbo_engine --test integration_engine engine_test --release
@@ -12,11 +12,12 @@ fn engine_test() -> anyhow::Result<()> {
         NaiveDate::from_ymd_opt(2025, 05, 17).unwrap(),
         0,
     );
-    run(logic, &cfg)?;
+    let mut latency = UnitNormalLatency::new(25_000_000, 1_000_000);
+    run(logic, &cfg, &mut latency)?;
     Ok(())
 }
 
-fn logic(mbo: &MboMsg) -> Option<Action> {
+fn logic(mbo: &MboMsg) -> Option<action::Request> {
     _ = mbo;
     None
 }

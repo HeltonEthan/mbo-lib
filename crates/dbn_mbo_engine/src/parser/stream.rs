@@ -8,7 +8,7 @@ use dbn::{
 use fallible_streaming_iterator::FallibleStreamingIterator;
 use std::{fs::File, io::BufReader, path::PathBuf};
 
-use crate::api::action::Order;
+use crate::api::{action::OrderRequest, latency::LatencyModel};
 use crate::orderbook::market::Market;
 use crate::parser::file;
 use crate::prelude::*;
@@ -18,7 +18,7 @@ use crate::prelude::*;
 /// It iterates through each file and creates a dbn stream for each,
 /// it passes a clone of mbo_msg to the limit orderbook for reconstruction.
 /// Then passes a reference of mbo to the callback function 'logic'.
-pub fn run<F: FnMut(&MboMsg) -> Option<Action>>(mut logic: F, cfg: &Config) -> anyhow::Result<()> {
+pub fn run<F: FnMut(&MboMsg) -> Option<action::Request>, L: LatencyModel>(mut logic: F, cfg: &Config, latency: &mut L) -> anyhow::Result<()> {
     let start_unix = cfg.start_unix()?;
     let end_unix = cfg.end_unix()?;
     let mut market = Market::new();
@@ -33,9 +33,9 @@ pub fn run<F: FnMut(&MboMsg) -> Option<Action>>(mut logic: F, cfg: &Config) -> a
                 break;
             }
             market.apply(mbo_msg.clone());
-            if let Some(action) = logic(mbo_msg) {
-                Order::new(action, mbo_msg);
-            };
+            if let Some(request) = logic(mbo_msg) {
+                OrderRequest::new(request, mbo_msg, latency);
+            }
         }
     }
     Ok(())

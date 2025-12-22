@@ -17,7 +17,7 @@ use crate::prelude::*;
 ///
 /// It iterates through each file and creates a dbn stream for each,
 /// it passes a clone of mbo_msg to the limit orderbook for reconstruction.
-/// Then passes a reference of mbo to the callback function 'logic'.
+/// Then passes a reference of mbo to the callback function 'logic' and a 'LatencyModel'.
 pub fn run<F: FnMut(&MboMsg) -> Option<action::Request>, L: LatencyModel>(mut logic: F, cfg: &Config, latency: &mut L) -> anyhow::Result<()> {
     let start_unix = cfg.start_unix()?;
     let end_unix = cfg.end_unix()?;

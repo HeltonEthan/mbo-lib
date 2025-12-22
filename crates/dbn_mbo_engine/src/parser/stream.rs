@@ -7,7 +7,7 @@ use dbn::{
 };
 use fallible_streaming_iterator::FallibleStreamingIterator;
 use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
-use std::{fs::File, io::BufReader, path::PathBuf, sync::atomic::{AtomicU64, Ordering}};
+use std::{fs::File, io::BufReader, path::PathBuf};
 
 use crate::api::{action::{Request, OrderRequest}, latency::LatencyModel};
 use crate::orderbook::market::Market;
@@ -24,14 +24,12 @@ where L: FnMut(&MboMsg) -> Option<Request> + Send, LF: Fn() -> L + Sync + Send, 
     let start_unix = cfg.start_unix()?;
     let end_unix = cfg.end_unix()?;
     let paths  = file::get_files(&cfg)?;
-    let count = AtomicU64::new(0);
     paths.par_iter().try_for_each(|path| -> anyhow::Result<()> {
         let mut dbn_stream = Decoder::from_zstd_file(path)?.decode_stream::<MboMsg>();
         let mut logic = logic_factory();
         let mut latency_model = latency_model_factory();
         let mut market = Market::new();
         while let Some(mbo_msg) = dbn_stream.next()? {
-            count.fetch_add(1, Ordering::Relaxed);
             if mbo_msg.ts_recv < start_unix {
                 continue;
             }
@@ -45,7 +43,6 @@ where L: FnMut(&MboMsg) -> Option<Request> + Send, LF: Fn() -> L + Sync + Send, 
         }
         Ok(())
     })?;
-    println!("{:#?}", count);
     Ok(())
 }
 

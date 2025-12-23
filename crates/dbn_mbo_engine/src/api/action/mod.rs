@@ -28,4 +28,6 @@ impl Request {
 
 pub trait Submit {
     fn submit<LM: LatencyModel>(&self, mbo: &MboMsg, latency: &mut LM) -> Ack;
+
+    fn check_request(&self) -> Ack;
 }

@@ -14,4 +14,8 @@ impl Submit for ModifyRequest {
     fn submit<LM: LatencyModel>(&self, mbo: &MboMsg, latency: &mut LM) -> Ack {
         todo!()
     }
+    
+    fn check_request(&self) -> Ack {
+        todo!()
+    }
 }

@@ -2,10 +2,7 @@ use std::collections::HashMap;
 
 use dbn::Action;
 
-use crate::api_internal::{
-    book::Book,
-    order::Order,
-};
+use crate::api_internal::{book::Book, order::Order};
 
 #[derive(Debug, Default)]
 pub struct Market {

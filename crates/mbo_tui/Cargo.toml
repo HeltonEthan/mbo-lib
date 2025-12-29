@@ -1,7 +1,6 @@
 [package]
-name = "dbn_mbo_graphing"
+name = "mbo_tui"
 version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-plotpy = { workspace = true }

@@ -1,8 +1,0 @@
-[package]
-name = "dbn_mbo_internal"
-version = "0.1.0"
-edition = "2024"
-
-[dependencies]
-dbn_mbo_engine = { workspace = true }
-dbn_mbo_graphing = { workspace = true }

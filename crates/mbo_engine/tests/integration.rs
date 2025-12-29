@@ -1,10 +1,10 @@
 use chrono::{NaiveDate, NaiveTime};
-use dbn_mbo_engine::{
-    config::Config, enums::Ack, lob::book::{Book, LobMbo}, stream::hotloop::{self, Mbo, RxMsg}
+use mbo_engine::{
+    config::Config, enums::Ack, stream::hotloop::{self, Mbo, RxMsg}
 };
 use std::path::PathBuf;
 
-// cargo test -p dbn_mbo_engine --test integration engine_test --release
+// cargo test -p mbo_engine --test integration engine_test --release
 // samply record
 #[test]
 fn engine_test() -> anyhow::Result<()> {

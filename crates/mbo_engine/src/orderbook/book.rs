@@ -1,6 +1,6 @@
-use std::collections::{BTreeMap, VecDeque};
 use dbn::{FlagSet, UNDEF_PRICE};
 use hashbrown::HashMap;
+use std::collections::{BTreeMap, VecDeque};
 
 use crate::stream::hotloop::Mbo;
 
@@ -25,7 +25,7 @@ impl Book {
             val if val == b'C' as i8 => self.cancel(mbo),
             val if val == b'A' as i8 => self.add(mbo),
             val if val == b'R' as i8 => self.clear(),
-            _ => {}
+            _ => {},
         }
     }
 
@@ -46,8 +46,15 @@ impl Book {
             // UNDEF_PRICE indicates the side's book should be cleared
             // and doesn't represent an order that should be added
             if price != UNDEF_PRICE {
-                levels.insert(price, VecDeque::from())
+                levels.insert(price, VecDeque::from([mbo]));
             }
+        } else {
+            if price == UNDEF_PRICE {
+                return;
+            };
+            assert!(self.orders_by_id.insert(mbo.order_id, (side, price)).is_none());
+            let level = self.get_or_insert_level(side, price);
+            level.push_back(mbo);
         }
     }
 
@@ -58,6 +65,12 @@ impl Book {
             val if val == b'B' as i8 => &mut self.bids,
             _ => panic!("Invalid side None"),
         }
+    }
+
+    #[inline]
+    fn get_or_insert_level(&mut self, side: i8, price: i64) -> &mut Level {
+        let levels = self.side_levels_mut(side);
+        levels.entry(price).or_default()
     }
 }
 

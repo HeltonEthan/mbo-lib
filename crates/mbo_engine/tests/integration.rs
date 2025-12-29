@@ -21,7 +21,7 @@ fn engine_test() -> anyhow::Result<()> {
         .and_utc()
         .timestamp() as u64;
     let cfg = Config::new(
-        PathBuf::from("C:/Users/helto/GLBX-20250915-NGKNUL4VBG"),
+        PathBuf::from("C:/Users/helto/GLBX-20250915-NGKNUL4VBG/dbn"),
         start * 1_000_000_000,
         end * 1_000_000_000,
         std::thread::available_parallelism()?.get(),

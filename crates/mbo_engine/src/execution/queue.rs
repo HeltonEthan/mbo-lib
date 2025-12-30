@@ -38,6 +38,7 @@ pub struct FillLog {
     pub seq: u64,
 }
 
+#[derive(Debug, Clone, Copy)]
 pub struct Fill {
     pub ts_event: u64,
     pub instrument_id: u32,
